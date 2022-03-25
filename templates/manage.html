@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+	{% if current_user.isadmin %}
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js.js') }}"></script>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
+		<h1>Manage</h1>
+		<hr>
+		<form action="" method="post">
+			{{ add_session_form.hidden_tag() }}
+			{{ add_session_form.submit(class_='btn btn-primary') }}
+			{{ add_session_form.name() }}
+		</form>
+		<hr>
+		{% for folder in files %}
+			<h3 style="margin: 0 0 10px 0; display: inline-block;">{{ folder }}</h2>
+			<form action="{{ url_for('main.delete_session', session=folder) }}" method="post" style="margin: 0 0 10px 0; float: right;">
+				<input type="submit" value="Delete Session" class="btn btn-danger" />
+			</form>
+			{% if upload_forms[folder] %}
+				{% set upload_form = upload_forms[folder] %}
+				<div style="border: 1px solid #dddddd; padding: 10px;">
+					<h4>Upload files:</h4>
+					<form action="" method="post" enctype="multipart/form-data">
+						{{ upload_form.hidden_tag() }}
+						<p>{{ upload_form.file() }}</p>
+						<p>{{ upload_form.submit(class_='btn btn-primary') }}</p>
+					</form>
+				</div>
+			{% endif %}
+			<br>
+			{% if files[folder] %}
+				<table class="table table-hover">
+					<thead>
+						<th>Passed auto check?</th>
+						<th>File name</th>
+						<th>Actions</th>
+					</thead>
+					<tbody>
+						{% for file in files[folder] %}
+							<tr class="midi-row">
+								<td>
+									{% if file['status']==1 %}
+										<span style="color: green;">&#10003;</span>
+									{% elif file['status']==0 %}
+										<span style="color: red;">&#10005;</span>
+									{% endif %}
+								</td>
+								<td>
+									{{ file['name'] }}	
+								</td>
+								<td>
+									<form action="{{ url_for('main.delete_midi', session=file['session'], name=file['name']) }}" method="post">
+										<input type="submit" value="Delete" class="btn btn-danger" />
+									</form>
+								</td>
+							</tr>
+							<tr class="details-row tr-collapse">
+								<td>
+									<b>Errors:</b> {{ file['details']['nErrors'] }}<br>
+									<b>Header found:</b> {{ file['details']['headerFound'] }}<br>
+									<b>Header chunk length:</b> {{ file['details']['headerChunkLen'] }}<br>
+									<b>Format type:</b> {{ file['details']['formatType'] }}<br>
+									<b># tracks:</b> {{ file['details']['nTracks'] }}<br>
+									<b>Timing:</b> {{ file['details']['timing'] }}<br>
+									<br>
+									<b>Error list:</b> {{ file['details']['errorList'] }}
+								</td>
+								<td colspan="2">
+									<b>Track info:</b><br>
+									{% for track in file['details']['trackInfo'] %}
+										{% if track[0] == '' %}
+											{% set name = '<No name>' %}
+										{% else %}
+											{% set name = track[0] %}
+										{% endif %}
+										<b>&emsp;{{ name }}</b><br>
+										<i>&emsp;&emsp;Instrument:</i> {{ track[1][0] }} on channel {{ track[1][1] }}<br>
+										{% set vol = track[2][0]|float %}
+										<i>&emsp;&emsp;Volume:</i> {{ '%.1f'|format(vol) }} on channel {{ track[2][1] }}<br>
+									{% endfor %}
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			{% else %}
+				<i>[No files found for this session.]</i>
+			{% endif %}
+			<hr>
+		{% endfor %}
+	{% else %}
+		<h2>You don't have permission to view this page.</h2>
+	{% endif %}
+{% endblock %}

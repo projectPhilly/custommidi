@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
+	<h1>Project Philly CustomMidi</h1>
+	<h3>Customize a MIDI file for practice&#8211;exclusively for Project Philly members!</h3>
+	<hr>
+	
+	<div class="row">
+		
+		<div class="column left-column">
+			<h4>All MIDIs</h4>
+			{% for session in sessions %}
+				<b>{{ session }}</b>
+					<ul>
+						{% for midi in sessions[session] %}
+							<li><a href=" {{ url_for('main.index', midi=midi.id) }}">{{ midi.name }}</li></a>
+						{% endfor %}
+					</ul>
+			{% endfor %}
+		</div>
+		
+		<div class="column right-column">
+			<h4>Customize Selected MIDI</h4>
+			{% if midi %}
+				<p>You are editing "{{ midi.name }}" from {{ session_name }}.</p>
+				<form action="" method="post">
+					<table class="table table-hover">
+						<thead>
+							<th>Track Name</th>
+							<th>Instrument</th>
+							<th>Volume</th>
+							<th>Tempo</th>
+							<th></th>
+						</thead>
+						<tbody>
+							{{ edit_tracks_form.hidden_tag() }}
+							<tr>
+								<td><b><i>ALL</i></b></td>
+								<td>{{ edit_tracks_form.globalinstrument() }}</td>
+								<td>{{ edit_tracks_form.globalvolume() }}%</td>
+								<td>{{ edit_tracks_form.globaltempo() }}%</td>
+								<td><input type="submit" name="apply-to-all" value="Apply to all" class="btn"></td>
+							</tr>
+							{% for i in range(edit_tracks_form.tracks|length) %}
+								<tr>
+									<td>&emsp;&emsp;{{ midi.details['trackInfo'][i][0] }}</td>
+									<td>&emsp;&emsp;{{ edit_tracks_form.tracks[i].form.instrument() }}</td>
+									<td>&emsp;&emsp;{{ edit_tracks_form.tracks[i].form.volume() }}%</td>
+									<td></td>
+									<td></td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					<input type="submit" name="create" value="Create!" class="btn btn-primary" />
+				</form>
+			{% else %}
+				<p>No MIDI file selected. Pick one from the list on the left to begin editing.</p>
+			{% endif %}
+		</div>
+
+	</div>
+
+{% endblock %}
