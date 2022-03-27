@@ -1,0 +1,6 @@
+include app/main
+graft app/static
+graft app/templates
+graft app/main
+graft app/auth
+global-exclude *.pyc
