@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request, g, \
 	jsonify, current_app, abort, send_file, Response
 from flask_login import current_user, login_required
 from app import db
-from app.main.forms import EmptyForm, FileUploadForm, AddSessionForm, EditTracksForm
+from app.main.forms import EmptyForm, FileUploadForm, AddSessionForm, EditTracksForm, NameTracksForm
 from app.models import User, Session, Midi
 from app.main import bp
 import os
@@ -13,6 +13,7 @@ from app.scripts.midi_edit import edit_midi_file
 import shutil
 from io import BytesIO
 from werkzeug.wsgi import FileWrapper
+import sys
 
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -186,6 +187,42 @@ def delete_midi(session, name):
 		flash(f'File "{m.name}" from session "{s.name}" successfully deleted.')
 	return redirect(url_for('main.manage'))
 
+@bp.route('/edit_track_result/<string:midiId>', methods=['POST'])
+@login_required
+def edit_track_result(midiId):
+	midiStatic = Midi.query.get(midiId)
+	midi =db.session.query(Midi).filter(Midi.id==midiId).first() #Midi.query.filter(Midi.id == midiId).first()
+	print(request.form['trackNames-0-trackName'], file=sys.stderr)
+
+	newDetails = midiStatic.details
+	for i in range(len(midiStatic.details['trackInfo'])):
+		#midi.details['trackInfo'][i][0] = request.form[f'trackNames-{i}-trackName']
+		newDetails['trackInfo'][i][0] = request.form[f'trackNames-{i}-trackName']
+
+	# a hacky way to get the db to realize that the value is changing
+	midi.details = 'string'
+	db.session.commit()
+
+	midi.name = request.form['midiName']
+	midi.details = newDetails
+	print(midi.details['trackInfo'], file=sys.stderr)
+	db.session.commit()
+	return redirect(url_for('main.manage'))
+
+@bp.route('/edit_track_page/<string:midiId>', methods=['GET', 'POST'])
+@login_required
+def edit_track_page(midiId):
+		#Edit track names:
+		midi = Midi.query.get(midiId)
+		name_tracks_form = NameTracksForm(trackNames=[(i, midi.details['trackInfo'][i][0]) for i in range(len(midi.details['trackInfo']))])
+	
+		# Populate current values
+		name_tracks_form.midiName.data = midi.name
+		for (i, track) in enumerate(midi.details['trackInfo']):
+			name_tracks_form.trackNames[i].trackName.data = track[0]
+			
+		return render_template('editTrack.html', midi=midi, update_track_names=name_tracks_form)
+
 
 @bp.route('/manage', methods=['GET', 'POST'])
 @login_required
@@ -244,6 +281,7 @@ def manage():
 		forms[s.name] = FileUploadForm(s.name)
 		for m in Midi.query.filter_by(session_id=s.id).all():
 			files[s.name].append({
+					'id': m.id,
 					'session': s.name,
 					'name': m.name,
 					'status': m.status,

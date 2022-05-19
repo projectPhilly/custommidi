@@ -21,3 +21,26 @@
 	display: table;
 	clear: both;
 }
+
+.midi-list {
+	padding-left: 0;
+}
+
+.midi-list-item {
+	list-style: none;
+	border: 1px solid #1F1F1F;
+    border-radius: 4px;
+}
+
+.midi-list-item:hover {
+	box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+}
+
+.midi-list-item > a {
+	text-decoration: none;
+    padding: 3px;
+    text-align: center;
+    display: flex;
+    color: #4a4a4a;
+    font-weight: bold;
+}

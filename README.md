@@ -30,3 +30,16 @@
 11. Start the application with:
 `flask run`
 12. Go to `http://127.0.0.1:5000` to see the live site.
+
+
+### Starting when you return to work on it:
+1. Start the virtual py environment:
+`. venv/bin/activate`
+2. Start the application with:
+`flask run`
+
+### Troubleshooting:
+If flask run errors out with something about can't import Markdown from jinja2, then run `pip install Jinja2==3.0.0` to revert to version 3.0 of jinja2 
+
+### Turn on debug mode
+run `export FLASK_ENV=development` in the venv console

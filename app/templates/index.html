@@ -13,9 +13,11 @@
 			<h4>All MIDIs</h4>
 			{% for session in sessions %}
 				<b>{{ session }}</b>
-					<ul>
+					<ul class="midi-list">
 						{% for midi in sessions[session] %}
-							<li><a href=" {{ url_for('main.index', midi=midi.id) }}">{{ midi.name }}</li></a>
+							<li class="midi-list-item">
+								<a href=" {{ url_for('main.index', midi=midi.id) }}">{{ midi.name }}</a>
+							</li>
 						{% endfor %}
 					</ul>
 			{% endfor %}

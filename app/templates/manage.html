@@ -11,8 +11,9 @@
 		<hr>
 		<form action="" method="post">
 			{{ add_session_form.hidden_tag() }}
-			{{ add_session_form.submit(class_='btn btn-primary') }}
+			<b>New Session name:</b>
 			{{ add_session_form.name() }}
+			{{ add_session_form.submit(class_='btn btn-primary') }}
 		</form>
 		<hr>
 		{% for folder in files %}
@@ -53,6 +54,7 @@
 									{{ file['name'] }}	
 								</td>
 								<td>
+									<a href="{{ url_for('main.edit_track_page', midiId=file['id']) }}">Edit</a>
 									<form action="{{ url_for('main.delete_midi', session=file['session'], name=file['name']) }}" method="post">
 										<input type="submit" value="Delete" class="btn btn-danger" />
 									</form>
@@ -69,7 +71,7 @@
 									<br>
 									<b>Error list:</b> {{ file['details']['errorList'] }}
 								</td>
-								<td colspan="2">
+								<td>
 									<b>Track info:</b><br>
 									{% for track in file['details']['trackInfo'] %}
 										{% if track[0] == '' %}
@@ -82,6 +84,9 @@
 										{% set vol = track[2][0]|float %}
 										<i>&emsp;&emsp;Volume:</i> {{ '%.1f'|format(vol) }} on channel {{ track[2][1] }}<br>
 									{% endfor %}
+								</td>
+								<td>
+								
 								</td>
 							</tr>
 						{% endfor %}

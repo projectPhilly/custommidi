@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    {% if current_user.isadmin %}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js.js') }}"></script>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
+        <h1>Edit Track</h1>
+        <hr>
+        <form method="post" action="{{ url_for('main.edit_track_result', midiId=midi.id) }}">
+            {{ update_track_names.hidden_tag() }}
+            Midi Name:
+            {{ update_track_names.midiName() }}
+            {% for i in range(midi['details']['trackInfo']|length)%}
+                Track {{ i + 1 }}:
+                {{ update_track_names.trackNames[i].form.trackName() }}
+            {% endfor %}
+            {{ update_track_names.submit(class_='btn btn-primary') }}
+        </form>
+    {% else %}
+		<h2>You don't have permission to view this page.</h2>
+	{% endif %}
+{% endblock %}

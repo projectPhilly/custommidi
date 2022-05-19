@@ -34,5 +34,13 @@ class AddSessionForm(FlaskForm):
 	name = StringField('Name', validators=[DataRequired()])
 
 
+class TrackNameField(FlaskForm):
+	trackName = StringField('Track Name')
+
+class NameTracksForm(FlaskForm):
+	submit = SubmitField('Update')
+	midiName = StringField('Name', validators=[DataRequired()])
+	trackNames = FieldList(FormField(TrackNameField), min_entries=1, validators=[DataRequired()])
+
 class EmptyForm(FlaskForm):
 	submit = SubmitField('Submit')
