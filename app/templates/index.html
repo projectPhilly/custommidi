@@ -14,10 +14,16 @@
 			{% for session in sessions %}
 				<b>{{ session }}</b>
 					<ul class="midi-list">
-						{% for midi in sessions[session] %}
-							<li class="midi-list-item">
-								<a href=" {{ url_for('main.index', midi=midi.id) }}">{{ midi.name }}</a>
-							</li>
+						{% for mapMidi in sessions[session] %}
+							{% if midi and midi.id == mapMidi.id %}
+								<li class="midi-list-item midi-selected">
+									<a href=" {{ url_for('main.index', midi=mapMidi.id) }}" class="hover-underline-animation">{{ mapMidi.name }}</a>
+								</li>
+							{% else %}
+								<li class="midi-list-item">
+									<a href=" {{ url_for('main.index', midi=mapMidi.id) }}" class="hover-underline-animation">{{ mapMidi.name }}</a>
+								</li>
+							{% endif %}
 						{% endfor %}
 					</ul>
 			{% endfor %}
@@ -26,9 +32,13 @@
 		<div class="column right-column">
 			<h4>Customize Selected MIDI</h4>
 			{% if midi %}
-				<p>You are editing "{{ midi.name }}" from {{ session_name }}.</p>
 				<form action="" method="post">
-					<table class="table table-hover">
+					<div class="create-wrapper">
+						<p>You are editing "{{ midi.name }}" from {{ session_name }}.</p>
+						{{ edit_tracks_form.hidden_tag() }}
+						<input type="submit" name="create" value="Create!" class="btn btn-primary-blue" />
+					</div>
+					<table class="table">
 						<thead>
 							<th>Track Name</th>
 							<th>Instrument</th>
@@ -37,26 +47,24 @@
 							<th></th>
 						</thead>
 						<tbody>
-							{{ edit_tracks_form.hidden_tag() }}
-							<tr>
-								<td><b><i>ALL</i></b></td>
+							<tr class="midi-global-row">
+								<td class="midi-track-all"><b><i>ALL</i></b></td>
 								<td>{{ edit_tracks_form.globalinstrument() }}</td>
-								<td>{{ edit_tracks_form.globalvolume() }}%</td>
-								<td>{{ edit_tracks_form.globaltempo() }}%</td>
-								<td><input type="submit" name="apply-to-all" value="Apply to all" class="btn"></td>
+								<td class="percent-field">{{ edit_tracks_form.globalvolume() }}%</td>
+								<td class="percent-field">{{ edit_tracks_form.globaltempo() }}%</td>
+								<td class="apply-to-all-btn"><input type="submit" name="apply-to-all" value="Apply to all" class="btn"></td>
 							</tr>
 							{% for i in range(edit_tracks_form.tracks|length) %}
 								<tr>
-									<td>&emsp;&emsp;{{ midi.details['trackInfo'][i][0] }}</td>
-									<td>&emsp;&emsp;{{ edit_tracks_form.tracks[i].form.instrument() }}</td>
-									<td>&emsp;&emsp;{{ edit_tracks_form.tracks[i].form.volume() }}%</td>
+									<td class="midi-track-name"> <div>{{ midi.details['trackInfo'][i][0] }}</div></td>
+									<td class="instrument-select">{{ edit_tracks_form.tracks[i].form.instrument() }}</td>
+									<td class="percent-field">{{ edit_tracks_form.tracks[i].form.volume() }}%</td>
 									<td></td>
 									<td></td>
 								</tr>
 							{% endfor %}
 						</tbody>
 					</table>
-					<input type="submit" name="create" value="Create!" class="btn btn-primary" />
 				</form>
 			{% else %}
 				<p>No MIDI file selected. Pick one from the list on the left to begin editing.</p>

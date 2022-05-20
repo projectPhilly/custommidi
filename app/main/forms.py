@@ -9,12 +9,12 @@ from app.scripts.midi_check import INSTRUMENT_NAMES
 
 
 class EditTrackForm(FlaskForm):
-	instrument = SelectField('Instrument', choices=[(key, f'{key}: {INSTRUMENT_NAMES[key]}') for key in INSTRUMENT_NAMES], coerce=int)
+	instrument = SelectField('Instrument', choices=[(key, f'{INSTRUMENT_NAMES[key]}') for key in INSTRUMENT_NAMES], coerce=int)
 	volume = IntegerField('Volume')
 
 
 class EditTracksForm(FlaskForm):
-	globalinstrument = SelectField('Instrument', choices=[(key, f'{key}: {INSTRUMENT_NAMES[key]}') for key in INSTRUMENT_NAMES], coerce=int)
+	globalinstrument = SelectField('Instrument', choices=[(key, f'{INSTRUMENT_NAMES[key]}') for key in INSTRUMENT_NAMES], coerce=int)
 	globalvolume = IntegerField('Volume')
 	globaltempo = IntegerField('Tempo')
 	tracks = FieldList(FormField(EditTrackForm), min_entries=1)

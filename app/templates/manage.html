@@ -13,7 +13,7 @@
 			{{ add_session_form.hidden_tag() }}
 			<b>New Session name:</b>
 			{{ add_session_form.name() }}
-			{{ add_session_form.submit(class_='btn btn-primary') }}
+			{{ add_session_form.submit(class_='btn btn-primary-blue') }}
 		</form>
 		<hr>
 		{% for folder in files %}
@@ -28,7 +28,7 @@
 					<form action="" method="post" enctype="multipart/form-data">
 						{{ upload_form.hidden_tag() }}
 						<p>{{ upload_form.file() }}</p>
-						<p>{{ upload_form.submit(class_='btn btn-primary') }}</p>
+						<p>{{ upload_form.submit(class_='btn btn-primary-blue') }}</p>
 					</form>
 				</div>
 			{% endif %}
@@ -36,32 +36,38 @@
 			{% if files[folder] %}
 				<table class="table table-hover">
 					<thead>
-						<th>Passed auto check?</th>
-						<th>File name</th>
-						<th>Actions</th>
+						<th class="col1">Passed auto check?</th>
+						<th class="col2">File name</th>
+						<th class="col3">Actions</th>
 					</thead>
 					<tbody>
 						{% for file in files[folder] %}
 							<tr class="midi-row">
-								<td>
+								<td class="col1">
 									{% if file['status']==1 %}
 										<span style="color: green;">&#10003;</span>
 									{% elif file['status']==0 %}
 										<span style="color: red;">&#10005;</span>
 									{% endif %}
 								</td>
-								<td>
+								<td class="col2">
 									{{ file['name'] }}	
 								</td>
-								<td>
-									<a href="{{ url_for('main.edit_track_page', midiId=file['id']) }}">Edit</a>
-									<form action="{{ url_for('main.delete_midi', session=file['session'], name=file['name']) }}" method="post">
-										<input type="submit" value="Delete" class="btn btn-danger" />
-									</form>
+								<td class="col3">
+									<div class="trackButtonsWrapper">
+										<div class="buttonLink">
+											<a href="{{ url_for('main.edit_track_page', midiId=file['id']) }}">
+												<div class="link-container">Edit</div>
+											</a>
+										</div>
+										<form action="{{ url_for('main.delete_midi', session=file['session'], name=file['name']) }}" method="post">
+											<input type="submit" value="Delete" class="btn btn-danger" />
+										</form>
+									</div>
 								</td>
 							</tr>
 							<tr class="details-row tr-collapse">
-								<td>
+								<td class="col1">
 									<b>Errors:</b> {{ file['details']['nErrors'] }}<br>
 									<b>Header found:</b> {{ file['details']['headerFound'] }}<br>
 									<b>Header chunk length:</b> {{ file['details']['headerChunkLen'] }}<br>
@@ -71,7 +77,7 @@
 									<br>
 									<b>Error list:</b> {{ file['details']['errorList'] }}
 								</td>
-								<td>
+								<td class="col2">
 									<b>Track info:</b><br>
 									{% for track in file['details']['trackInfo'] %}
 										{% if track[0] == '' %}
@@ -85,7 +91,7 @@
 										<i>&emsp;&emsp;Volume:</i> {{ '%.1f'|format(vol) }} on channel {{ track[2][1] }}<br>
 									{% endfor %}
 								</td>
-								<td>
+								<td class="col3">
 								
 								</td>
 							</tr>
