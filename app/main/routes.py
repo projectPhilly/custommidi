@@ -231,14 +231,10 @@ def manage():
 		return redirect(url_for('main.index'))
 
 	if request.method == 'POST':
-
 		# Upload files:
-		try:
-			# complicated way to get "name" attribute of form item with "Upload" key
-			session_name = list(request.form.keys())[list(request.form.values()).index('Upload')]
-		except ValueError: # "Upload" key not found
-			pass
-		else:
+		form_keys = list(request.form.keys())
+		if 'session' in form_keys:
+			session_id = request.form['session']
 			for uploaded_file in request.files.getlist('file'):
 				if uploaded_file.filename != '':
 					file_ext = os.path.splitext(uploaded_file.filename)[1]
@@ -249,14 +245,15 @@ def manage():
 						status = 1
 					else:
 						status = 0
-					s = Session.query.filter_by(name=session_name).first()
-					m = Midi(session_id=s.id, name=uploaded_file.filename,
-							 status=status, details=midi_details)
+					m = Midi(session_id=session_id, name=uploaded_file.filename,
+								status=status, details=midi_details)
 					db.session.add(m)
 					db.session.commit()
 					m = Midi.query.filter_by(name=uploaded_file.filename).first()
 					uploaded_file.seek(0) # important! otherwise file is blank (unsure why, pointer issue I guess)
-					uploaded_file.save(os.path.join(current_app.config['MIDI_FILES_PATH'], str(s.id), f'{str(m.id)}.mid'))
+
+					uploaded_file.save(os.path.join(current_app.config['MIDI_FILES_PATH'], str(session_id), f'{str(m.id)}.mid'))
+					flash('File Successfully Uploaded')
 			return redirect(url_for('main.manage'))
 
 	# Add session:
@@ -274,12 +271,14 @@ def manage():
 		os.mkdir(os.path.join(current_app.config['MIDI_FILES_PATH'], str(s.id)))
 		return redirect(url_for('main.manage'))
 
+	
+	file_upload_form = FileUploadForm()
+	file_upload_form.session.choices = [(s.id, s.name) for s in Session.query.order_by('name')]
+
 	files = {}
 	forms = {}
-	
 	for s in Session.query.order_by(Session.date.desc()).all():
 		files[s.name] = []
-		forms[s.name] = FileUploadForm(s.name)
 		for m in Midi.query.filter_by(session_id=s.id).all():
 			files[s.name].append({
 					'id': m.id,
@@ -290,4 +289,5 @@ def manage():
 				})
 	
 	return render_template('manage.html', title='Manage', files=files, 
-					upload_forms=forms, add_session_form=add_session_form)
+					upload_forms=forms, add_session_form=add_session_form,
+					file_upload_form=file_upload_form)

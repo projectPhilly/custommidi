@@ -22,11 +22,8 @@ class EditTracksForm(FlaskForm):
 
 class FileUploadForm(FlaskForm):
 	file = MultipleFileField('File')
+	session = SelectField('Session')
 	submit = SubmitField('Upload')
-
-	def __init__(self, folder, *args, **kwargs):
-		super(FileUploadForm, self).__init__(*args, **kwargs)
-		self.submit.name = folder
 
 
 class AddSessionForm(FlaskForm):
