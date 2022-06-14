@@ -28,6 +28,7 @@ def load_user(id):
 class Session(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(64), index=True, unique=True)
+	date = db.Column(db.Date)
 
 
 class Midi(db.Model):

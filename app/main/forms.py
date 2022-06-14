@@ -2,7 +2,7 @@ from flask import request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, \
 					HiddenField, MultipleFileField, SelectField, \
-					IntegerField, FieldList, FormField
+					IntegerField, FieldList, FormField, DateField
 from wtforms.validators import ValidationError, DataRequired, Length
 from app.models import User, Session
 from app.scripts.midi_check import INSTRUMENT_NAMES
@@ -32,6 +32,7 @@ class FileUploadForm(FlaskForm):
 class AddSessionForm(FlaskForm):
 	submit = SubmitField('+ Add Session')
 	name = StringField('Name', validators=[DataRequired()])
+	date = DateField('Date', validators=[DataRequired()])
 
 
 class TrackNameField(FlaskForm):

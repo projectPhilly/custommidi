@@ -46,3 +46,16 @@ run `export FLASK_ENV=development` in the venv console
 
 ### Note:
 In order for the midis to upload and download properly, you need to add an empty folder called `midifiles` and another inside that called `1`. Might try to add this to the git repo so this comment becomes moot
+
+## Migrating the Database:
+1. Install Flask-Migrate if it isn't there already
+`pip install Flask-Migrate`
+2. Create a migration repository (folder) if there isn't one already
+`flask db init`
+3. Generate an initial migration file if there isn't one already
+`flask db migrate -m "Initial migration.`
+4. Create a new migration template
+`flask db revision`
+5. Go in and add your upgrade and downgrade functions. This link may be helpful: [Docs](https://alembic.sqlalchemy.org/en/latest/tutorial.html#create-a-migration-script)
+6. Run the migration
+`flask db upgrade`

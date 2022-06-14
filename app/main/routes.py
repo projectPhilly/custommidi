@@ -266,7 +266,8 @@ def manage():
 		if s is not None:
 			flash(f'Session "{add_session_form.name.data}" already exists. Please use a different name.')
 			return redirect(url_for('main.manage'))
-		s = Session(name=add_session_form.name.data)
+		s = Session(name=add_session_form.name.data, date=add_session_form.date.data)
+		print(Session.__table__.name, file=sys.stderr)
 		db.session.add(s)
 		db.session.commit()
 		s = Session.query.filter_by(name=add_session_form.name.data).first()
@@ -276,7 +277,7 @@ def manage():
 	files = {}
 	forms = {}
 	
-	for s in Session.query.order_by(Session.id.desc()).all():
+	for s in Session.query.order_by(Session.date.desc()).all():
 		files[s.name] = []
 		forms[s.name] = FileUploadForm(s.name)
 		for m in Midi.query.filter_by(session_id=s.id).all():
