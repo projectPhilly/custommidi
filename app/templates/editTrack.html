@@ -4,20 +4,38 @@
 {% block app_content %}
     {% if current_user.isadmin %}
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script>window.jQuery || document.write('<script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+		<script>window.jQuery || document.write(`<script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>`)</script>
 		<script type="text/javascript" src="{{ url_for('static', filename='js.js') }}"></script>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
         <h1>Edit Track</h1>
         <hr>
         <form method="post" action="{{ url_for('main.edit_track_result', midiId=midi.id) }}">
-            {{ update_track_names.hidden_tag() }}
-            Midi Name:
-            {{ update_track_names.midiName() }}
-            {% for i in range(midi['details']['trackInfo']|length)%}
-                Track {{ i + 1 }}:
-                {{ update_track_names.trackNames[i].form.trackName() }}
-            {% endfor %}
-            {{ update_track_names.submit(class_='btn btn-primary') }}
+            <div class="edit-form-container">
+                {{ update_track_names.hidden_tag() }}
+                <div class="edit-form-section">
+                    <div class="edit-field">
+                        <span>Midi Name:</span>
+                        {{ update_track_names.midiName() }}
+                    </div>
+                </div>
+                <div class="edit-form-section edit-tracks-section">
+
+                    {% for i in range(midi['details']['trackInfo']|length)%}
+                        <div class="edit-field">
+                            Track {{ i + 1 }}:
+                            {{ update_track_names.trackNames[i].form.trackName() }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="edit-form-section edit-buttons">
+                    <div class="buttonLink">
+                        <a href="{{ url_for('main.manage') }}">
+                            <div class="link-container">Cancel</div>
+                        </a>
+                    </div>
+                    {{ update_track_names.submit(class_='btn btn-primary-blue') }}
+                </div>
+            </div>
         </form>
     {% else %}
 		<h2>You don't have permission to view this page.</h2>

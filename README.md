@@ -43,3 +43,6 @@ If flask run errors out with something about can't import Markdown from jinja2, 
 
 ### Turn on debug mode
 run `export FLASK_ENV=development` in the venv console
+
+### Note:
+In order for the midis to upload and download properly, you need to add an empty folder called `midifiles` and another inside that called `1`. Might try to add this to the git repo so this comment becomes moot

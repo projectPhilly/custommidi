@@ -4,7 +4,7 @@
 {% block app_content %}
 	{% if current_user.isadmin %}
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script>window.jQuery || document.write('<script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+		<script>window.jQuery || document.write(`<script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>`)</script>
 		<script type="text/javascript" src="{{ url_for('static', filename='js.js') }}"></script>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
 		<h1>Manage</h1>
@@ -27,7 +27,7 @@
 					<h4>Upload files:</h4>
 					<form action="" method="post" enctype="multipart/form-data">
 						{{ upload_form.hidden_tag() }}
-						<p>{{ upload_form.file() }}</p>
+						<p>{{ upload_form.file(class_='btn') }}</p>
 						<p>{{ upload_form.submit(class_='btn btn-primary-blue') }}</p>
 					</form>
 				</div>
