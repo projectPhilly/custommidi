@@ -2,75 +2,94 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
-	<h1>Project Philly CustomMidi</h1>
-	<h3>Customize a MIDI file for practice&#8211;exclusively for Project Philly members!</h3>
-	<hr>
-	
-	<div class="row">
-		
-		<div class="column left-column">
-			<h4>All MIDIs</h4>
-			{% for session in sessions %}
-				<b>{{ session }}</b>
-					<ul class="midi-list">
-						{% for mapMidi in sessions[session] %}
-							{% if midi and midi.id == mapMidi.id %}
-								<li class="midi-list-item midi-selected">
-									<a href=" {{ url_for('main.index', midi=mapMidi.id) }}" class="hover-underline-animation">{{ mapMidi.name }}</a>
-								</li>
-							{% else %}
-								<li class="midi-list-item">
-									<a href=" {{ url_for('main.index', midi=mapMidi.id) }}" class="hover-underline-animation">{{ mapMidi.name }}</a>
-								</li>
-							{% endif %}
-						{% endfor %}
-					</ul>
-			{% endfor %}
-		</div>
-		
-		<div class="column right-column">
-			<h4>Customize Selected MIDI</h4>
-			{% if midi %}
-				<form action="" method="post">
-					<div class="create-wrapper">
-						<p>You are editing "{{ midi.name }}" from {{ session_name }}.</p>
-						{{ edit_tracks_form.hidden_tag() }}
-						<input type="submit" name="create" value="Create!" class="btn btn-primary-blue" />
-					</div>
-					<table class="table">
-						<thead>
-							<th>Track Name</th>
-							<th>Instrument</th>
-							<th>Volume</th>
-							<th>Tempo</th>
-							<th></th>
-						</thead>
-						<tbody>
-							<tr class="midi-global-row">
-								<td class="midi-track-all"><b><i>ALL</i></b></td>
-								<td>{{ edit_tracks_form.globalinstrument() }}</td>
-								<td class="percent-field">{{ edit_tracks_form.globalvolume() }}%</td>
-								<td class="percent-field">{{ edit_tracks_form.globaltempo() }}%</td>
-								<td><input type="submit" name="apply-to-all" value="Apply to all" class="btn btn-black"></td>
-							</tr>
-							{% for i in range(edit_tracks_form.tracks|length) %}
-								<tr>
-									<td class="midi-track-name"> <div>{{ midi.details['trackInfo'][i][0] }}</div></td>
-									<td class="instrument-select">{{ edit_tracks_form.tracks[i].form.instrument() }}</td>
-									<td class="percent-field">{{ edit_tracks_form.tracks[i].form.volume() }}%</td>
-									<td></td>
-									<td></td>
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</form>
-			{% else %}
-				<p>No MIDI file selected. Pick one from the list on the left to begin editing.</p>
-			{% endif %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write(`<script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>`)</script>
+<script type="text/javascript" src="{{ url_for('static', filename='js.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<h1>Project Philly CustomMidi</h1>
+<h3>Customize a MIDI file for practice&#8211;exclusively for Project Philly members!</h3>
+<hr>
+
+<div class="row">
+
+	<div class="column left-column">
+		<h4>All MIDIs</h4>
+		<div class="search-bar">
+			<input type="text" class="live-search-box" placeholder="Search here..." />
+			<span class="material-icons">search</span>
 		</div>
 
+		
+		{% for session in sessions %}
+		<b class="session-in-midi-list">{{ session }}</b>
+		<ul class="midi-list live-search-list">
+			{% for mapMidi in sessions[session] %}
+			{% if midi and midi.id == mapMidi.id %}
+			<li class="midi-list-item midi-selected">
+				<a href=" {{ url_for('main.index', midi=mapMidi.id) }}" class="hover-underline-animation">{{
+					mapMidi.name }}</a>
+			</li>
+			{% else %}
+			<li class="midi-list-item">
+				<a href=" {{ url_for('main.index', midi=mapMidi.id) }}" class="hover-underline-animation">{{
+					mapMidi.name }}</a>
+			</li>
+			{% endif %}
+			{% endfor %}
+			{% if sessions[session]|length == 0   %}
+			<li class="midi-list-item">
+				<i>No songs added yet</i>
+			</li>
+			{% endif %}
+		</ul>
+		{% endfor %}
 	</div>
+
+	<div class="column right-column">
+		<h4>Customize Selected MIDI</h4>
+		{% if midi %}
+		<form action="" method="post">
+			<div class="create-wrapper">
+				<p>You are editing "{{ midi.name }}" from {{ session_name }}.</p>
+				{{ edit_tracks_form.hidden_tag() }}
+				<input type="submit" name="create" value="Create!" class="btn btn-primary-blue" />
+			</div>
+			<table class="table">
+				<thead>
+					<th>Track Name</th>
+					<th>Instrument</th>
+					<th>Volume</th>
+					<th>Tempo</th>
+					<th></th>
+				</thead>
+				<tbody>
+					<tr class="midi-global-row">
+						<td class="midi-track-all"><b><i>ALL</i></b></td>
+						<td>{{ edit_tracks_form.globalinstrument() }}</td>
+						<td class="percent-field">{{ edit_tracks_form.globalvolume() }}%</td>
+						<td class="percent-field">{{ edit_tracks_form.globaltempo() }}%</td>
+						<td><input type="submit" name="apply-to-all" value="Apply to all" class="btn btn-black"></td>
+					</tr>
+					{% for i in range(edit_tracks_form.tracks|length) %}
+					<tr>
+						<td class="midi-track-name">
+							<div>{{ midi.details['trackInfo'][i][0] }}</div>
+						</td>
+						<td class="instrument-select">{{ edit_tracks_form.tracks[i].form.instrument() }}</td>
+						<td class="percent-field">{{ edit_tracks_form.tracks[i].form.volume() }}%</td>
+						<td></td>
+						<td></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</form>
+		{% else %}
+		<p>No MIDI file selected. Pick one from the list on the left to begin editing.</p>
+		{% endif %}
+	</div>
+
+</div>
 
 {% endblock %}

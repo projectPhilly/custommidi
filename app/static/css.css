@@ -125,7 +125,7 @@
 	height: 2px;
 	bottom: 0;
 	left: 0;
-	background-color: #1f1f1f;
+	background-color: #136d6a;
 	transform-origin: bottom right;
 	transition: transform 0.25s ease-out;
   }
@@ -190,6 +190,10 @@ select {
 	border-radius: 5px;
 }
 
+.session-in-midi-list {
+	border-bottom: solid;
+}
+
 /* Edit Form */
 
 .edit-form-container {
@@ -243,6 +247,7 @@ select {
 	color: black;
 }
 
+/* Manage Page: Session and Midi list*/
 .session-folder-container {
 	margin: 20px 0;
 }
@@ -260,6 +265,7 @@ select {
 	margin: 0 0 0 0;
 }
 
+/* Manage Page: Action Box */
 .action-container {
 	display: flex;
     justify-content: space-between;
@@ -285,4 +291,18 @@ select {
 .action-box #session {
 	border: solid 1px;
     border-radius: 2px;
+}
+
+/* Search Bar */
+.search-bar {
+	display: flex;
+	margin: 10px 0;
+}
+
+.search-bar > span {
+	margin-left: 10px;
+}
+
+.search-bar > input {
+	width: 100%;
 }
