@@ -22,4 +22,16 @@ $(document).ready(function () {
 		});
 
 	});
+
+	$('span.expanded').click(function () {
+		$(this).toggleClass('hidden');
+		$(this).parent().next('ul').toggleClass('hidden');
+		$(this).next('.closed').toggleClass('hidden');
+	})
+
+	$('span.closed').click(function () {
+		$(this).toggleClass('hidden');
+		$(this).parent().next('ul').toggleClass('hidden');
+		$(this).prev('.expanded').toggleClass('hidden');
+	})
 });

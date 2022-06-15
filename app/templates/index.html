@@ -22,7 +22,15 @@
 
 		
 		{% for session in sessions %}
-		<b class="session-in-midi-list">{{ session }}</b>
+		<div class="expand-icon-container">
+			<span class="material-icons expanded">
+				expand_more
+			</span>
+			<span class="material-icons closed hidden">
+				chevron_right
+			</span>
+			<b class="session-in-midi-list">{{ session }}</b>
+		</div>
 		<ul class="midi-list live-search-list">
 			{% for mapMidi in sessions[session] %}
 			{% if midi and midi.id == mapMidi.id %}
@@ -37,7 +45,7 @@
 			</li>
 			{% endif %}
 			{% endfor %}
-			{% if sessions[session]|length == 0   %}
+			{% if sessions[session]|length == 0 %}
 			<li class="midi-list-item">
 				<i>No songs added yet</i>
 			</li>

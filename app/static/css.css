@@ -39,14 +39,9 @@
 
 .midi-list-item {
 	list-style: none;
-	/* border: 1px solid #1F1F1F; */
     border-radius: 4px;
-	margin: 3px 0 3px 10px;
+	margin: 3px 0 3px 27px;
 }
-
-/* .midi-list-item:hover {
-	box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
-} */
 
 .midi-list-item > a {
 	text-decoration: none;
@@ -192,6 +187,22 @@ select {
 
 .session-in-midi-list {
 	border-bottom: solid;
+}
+
+.expand-icon-container {
+	display: flex;
+}
+
+.expand-icon-container .material-icons {
+	margin-right: 5px;
+}
+
+.expand-icon-container .material-icons:hover {
+	cursor: pointer;
+}
+
+.hidden {
+	display: none;
 }
 
 /* Edit Form */
