@@ -317,3 +317,31 @@ select {
 .search-bar > input {
 	width: 100%;
 }
+
+/*** MOBILE STYLING ***/
+
+@media screen and (max-width: 699px){
+	.action-container {
+		flex-direction: column;
+	}
+
+	.action-container > div:not(.action-submit-mobile) {
+		display: flex;
+    	justify-content: space-between;
+		margin-bottom: 10px;
+	}
+
+	.action-container #name,  
+	.action-container #date,
+	.action-container #session {
+		width: 55%;
+	}
+
+	.action-submit-mobile {
+		display: flex;
+		justify-content: center;
+    	margin: 10px 0;
+	}
+}
+
+
