@@ -78,7 +78,7 @@ def index():
 
 	# Collect sessions to display in left sidebar
 	sessions = {}
-	for s in Session.query.order_by(Session.id.desc()).all():
+	for s in Session.query.order_by(Session.date.desc()).all():
 		sessions[s.name] = Midi.query.filter_by(session_id=s.id).all()
 
 	# Determine which MIDI is being edited

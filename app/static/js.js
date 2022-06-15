@@ -34,4 +34,6 @@ $(document).ready(function () {
 		$(this).parent().next('ul').toggleClass('hidden');
 		$(this).prev('.expanded').toggleClass('hidden');
 	})
+
+	$('[data-toggle="tooltip"]').tooltip(); 
 });

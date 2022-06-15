@@ -7,6 +7,7 @@
 		<script>window.jQuery || document.write(`<script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>`)</script>
 		<script type="text/javascript" src="{{ url_for('static', filename='js.js') }}"></script>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<h1>Manage</h1>
 		
 		<div class="action-box">
@@ -20,6 +21,14 @@
 				<div>
 					<b>Session date:</b>
 					{{ add_session_form.date() }}
+					<span 
+						class="material-icons" 
+						data-toggle="tooltip" 
+						data-placement="top" 
+						title="Pick an approximate date to use for ordering the sessions chronologically"
+					>
+						info_outline
+					</span>
 				</div>
 				<div>
 					{{ add_session_form.submit(class_='btn btn-primary-blue') }}
