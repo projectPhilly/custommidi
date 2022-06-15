@@ -3,8 +3,6 @@ appnope==0.1.2
 asttokens==2.0.5
 backcall==0.2.0
 click==8.0.4
--e git+git@github.com:dpdwilson/custommidi.git@b8fce57571b9951fd7b5c63e70d06d9c2d8b3382#egg=Custom_Midi
--e git+git@github.com:dpdwilson/custommidi.git@b8fce57571b9951fd7b5c63e70d06d9c2d8b3382#egg=custommidi
 decorator==5.1.1
 dominate==2.6.0
 executing==0.8.3
