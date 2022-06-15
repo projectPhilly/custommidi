@@ -242,3 +242,47 @@ select {
 .edit-buttons > .buttonLink > a {
 	color: black;
 }
+
+.session-folder-container {
+	margin: 20px 0;
+}
+
+.session-folder-header {
+	background: #ddd;
+    padding: 10px;
+    border-radius: 10px;
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.session-folder-container h3 {
+	margin: 0 0 0 0;
+}
+
+.action-container {
+	display: flex;
+    justify-content: space-between;
+}
+
+.action-box {
+	border: 1px solid #dddddd; 
+	padding: 10px;
+}
+
+.action-box h4 {
+	margin-bottom: 20px;
+}
+
+.action-box b {
+	margin-right: 10px;
+}
+
+.action-box input[type=file] {
+	display: inline-block;
+}
+
+.action-box #session {
+	border: solid 1px;
+    border-radius: 2px;
+}

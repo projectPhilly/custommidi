@@ -9,100 +9,117 @@
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
 		<h1>Manage</h1>
 		
-		<div style="border: 1px solid #dddddd; padding: 10px;">
+		<div class="action-box">
 			<h4>Add Session:</h4>
-			<form action="" method="post">
+			<form action="" method="post" class="action-container">
 				{{ add_session_form.hidden_tag() }}
-				<b>New Session name:</b>
-				{{ add_session_form.name() }}
-				{{ add_session_form.date() }}
-				{{ add_session_form.submit(class_='btn btn-primary-blue') }}
+				<div>
+					<b>New Session name:</b>
+					{{ add_session_form.name() }}
+				</div>
+				<div>
+					<b>Session date:</b>
+					{{ add_session_form.date() }}
+				</div>
+				<div>
+					{{ add_session_form.submit(class_='btn btn-primary-blue') }}
+				</div>
 			</form>
 			<hr>
 			<h4>Upload files:</h4>
-			<form action="" method="post" enctype="multipart/form-data">
+			<form action="" method="post" enctype="multipart/form-data" class="action-container">
 				{{ file_upload_form.hidden_tag() }}
-				<p> Select Session: {{ file_upload_form.session() }}</p>
-				<p>{{ file_upload_form.file(class_='btn') }}</p>
-				<p>{{ file_upload_form.submit(class_='btn btn-primary-blue') }}</p>
+				<div>
+					<b>Select Session:</b>
+					{{ file_upload_form.session() }}
+				</div>
+				<div>
+					<b>Select File:</b>
+					{{ file_upload_form.file(class_='btn') }}
+				</div>
+				<div>
+					{{ file_upload_form.submit(class_='btn btn-primary-blue') }}
+				</div>
 			</form>
 		</div>
-		<hr>
 		{% for folder in files %}
-			<h3 style="margin: 0 0 10px 0; display: inline-block;">{{ folder }}</h2>
-			<form action="{{ url_for('main.delete_session', session=folder) }}" method="post" style="margin: 0 0 10px 0; float: right;">
-				<input type="submit" value="Delete Session" class="btn btn-danger" />
-			</form>
-			<br>
-			{% if files[folder] %}
-				<table class="table table-hover">
-					<thead>
-						<th class="col1">Passed auto check?</th>
-						<th class="col2">File name</th>
-						<th class="col3">Actions</th>
-					</thead>
-					<tbody>
-						{% for file in files[folder] %}
-							<tr class="midi-row">
-								<td class="col1">
-									{% if file['status']==1 %}
-										<span style="color: green;">&#10003;</span>
-									{% elif file['status']==0 %}
-										<span style="color: red;">&#10005;</span>
-									{% endif %}
-								</td>
-								<td class="col2">
-									{{ file['name'] }}	
-								</td>
-								<td class="col3">
-									<div class="trackButtonsWrapper">
-										<div class="buttonLink">
-											<a href="{{ url_for('main.edit_track_page', midiId=file['id']) }}">
-												<div class="link-container">Edit</div>
-											</a>
-										</div>
-										<form action="{{ url_for('main.delete_midi', session=file['session'], name=file['name']) }}" method="post">
-											<input type="submit" value="Delete" class="btn btn-danger" />
-										</form>
-									</div>
-								</td>
-							</tr>
-							<tr class="details-row tr-collapse">
-								<td class="col1">
-									<b>Errors:</b> {{ file['details']['nErrors'] }}<br>
-									<b>Header found:</b> {{ file['details']['headerFound'] }}<br>
-									<b>Header chunk length:</b> {{ file['details']['headerChunkLen'] }}<br>
-									<b>Format type:</b> {{ file['details']['formatType'] }}<br>
-									<b># tracks:</b> {{ file['details']['nTracks'] }}<br>
-									<b>Timing:</b> {{ file['details']['timing'] }}<br>
-									<br>
-									<b>Error list:</b> {{ file['details']['errorList'] }}
-								</td>
-								<td class="col2">
-									<b>Track info:</b><br>
-									{% for track in file['details']['trackInfo'] %}
-										{% if track[0] == '' %}
-											{% set name = '<No name>' %}
-										{% else %}
-											{% set name = track[0] %}
+			<div class="session-folder-container">
+				<div class="session-folder-header">
+					<h3>{{ folder }}</h2>
+					<form action="{{ url_for('main.delete_session', session=folder) }}" method="post">
+						<input type="submit" value="Delete Session" class="btn btn-danger" />
+					</form>
+				</div>
+				<br>
+				{% if files[folder] %}
+					<table class="table table-hover">
+						<thead>
+							<th class="col1">Passed auto check?</th>
+							<th class="col2">File name</th>
+							<th class="col3">Actions</th>
+						</thead>
+						<tbody>
+							{% for file in files[folder] %}
+								<tr class="midi-row">
+									<td class="col1">
+										{% if file['status']==1 %}
+											<span style="color: green;">&#10003;</span>
+										{% elif file['status']==0 %}
+											<span style="color: red;">&#10005;</span>
 										{% endif %}
-										<b>&emsp;{{ name }}</b><br>
-										<i>&emsp;&emsp;Instrument:</i> {{ track[1][0] }} on channel {{ track[1][1] }}<br>
-										{% set vol = track[2][0]|float %}
-										<i>&emsp;&emsp;Volume:</i> {{ '%.1f'|format(vol) }} on channel {{ track[2][1] }}<br>
-									{% endfor %}
-								</td>
-								<td class="col3">
-								
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			{% else %}
-				<i>[No files found for this session.]</i>
-			{% endif %}
-			<hr>
+									</td>
+									<td class="col2">
+										{{ file['name'] }}	
+									</td>
+									<td class="col3">
+										<div class="trackButtonsWrapper">
+											<div class="buttonLink">
+												<a href="{{ url_for('main.edit_track_page', midiId=file['id']) }}">
+													<div class="link-container">Edit</div>
+												</a>
+											</div>
+											<form action="{{ url_for('main.delete_midi', session=file['session'], name=file['name']) }}" method="post">
+												<input type="submit" value="Delete" class="btn btn-danger" />
+											</form>
+										</div>
+									</td>
+								</tr>
+								<tr class="details-row tr-collapse">
+									<td class="col1">
+										<b>Errors:</b> {{ file['details']['nErrors'] }}<br>
+										<b>Header found:</b> {{ file['details']['headerFound'] }}<br>
+										<b>Header chunk length:</b> {{ file['details']['headerChunkLen'] }}<br>
+										<b>Format type:</b> {{ file['details']['formatType'] }}<br>
+										<b># tracks:</b> {{ file['details']['nTracks'] }}<br>
+										<b>Timing:</b> {{ file['details']['timing'] }}<br>
+										<br>
+										<b>Error list:</b> {{ file['details']['errorList'] }}
+									</td>
+									<td class="col2">
+										<b>Track info:</b><br>
+										{% for track in file['details']['trackInfo'] %}
+											{% if track[0] == '' %}
+												{% set name = '<No name>' %}
+											{% else %}
+												{% set name = track[0] %}
+											{% endif %}
+											<b>&emsp;{{ name }}</b><br>
+											<i>&emsp;&emsp;Instrument:</i> {{ track[1][0] }} on channel {{ track[1][1] }}<br>
+											{% set vol = track[2][0]|float %}
+											<i>&emsp;&emsp;Volume:</i> {{ '%.1f'|format(vol) }} on channel {{ track[2][1] }}<br>
+										{% endfor %}
+									</td>
+									<td class="col3">
+									
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				{% else %}
+					<i>[No files found for this session.]</i>
+				{% endif %}
+			</div>
 		{% endfor %}
 	{% else %}
 		<h2>You don't have permission to view this page.</h2>

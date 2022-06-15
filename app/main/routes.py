@@ -191,12 +191,11 @@ def delete_midi(session, name):
 @login_required
 def edit_track_result(midiId):
 	midiStatic = Midi.query.get(midiId)
-	midi =db.session.query(Midi).filter(Midi.id==midiId).first() #Midi.query.filter(Midi.id == midiId).first()
+	midi =db.session.query(Midi).filter(Midi.id==midiId).first()
 	print(request.form['trackNames-0-trackName'], file=sys.stderr)
 
 	newDetails = midiStatic.details
 	for i in range(len(midiStatic.details['trackInfo'])):
-		#midi.details['trackInfo'][i][0] = request.form[f'trackNames-{i}-trackName']
 		newDetails['trackInfo'][i][0] = request.form[f'trackNames-{i}-trackName']
 
 	# a hacky way to get the db to realize that the value is changing
