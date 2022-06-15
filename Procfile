@@ -1,1 +1,1 @@
-web: gunicorn __init__:app
+web: gunicorn --workers=2 'test:create_app()'
