@@ -21,6 +21,7 @@
 `from custommidi import db`
 `db.create_all()`
 9. Add in the Admin user:
+`from custommidi import User`
 `from werkzeug.security import generate_password_hash`
 `admin = User(username='ProjectPhillyAdmin', password_hash=generate_password_hash('SingingIsLyfe'), isadmin=True)`
 `db.session.add(admin)`

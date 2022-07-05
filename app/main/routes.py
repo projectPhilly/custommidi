@@ -68,8 +68,9 @@ def index():
 				except:
 					tempo = 100
 				data = edit_midi_file(original_midi_filepath, tracks, tempo)
+				newFilename = midi.name if '.mid' in midi.name else midi.name + '.mid'
 				headers = {
-					'Content-Disposition': f'attachment; filename="{midi.name}"'
+					'Content-Disposition': f'attachment; filename="{newFilename}"'
 				}
 				return Response(FileWrapper(BytesIO(data)),
 								direct_passthrough=True, mimetype='audio/sp-midi',
