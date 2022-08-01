@@ -10,6 +10,7 @@ class Config(object):
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
 		'sqlite:///' + os.path.join(basedir, 'app.db')
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
-	MIDI_FILES_PATH = os.path.join(basedir, 'app', 'midifiles1')
+	MIDI_FILES_PATH = os.path.join(basedir, 'app', 'midifiles')
 	MAX_CONTENT_LENGTH = 1024*1024*10 # 10 MB
 	UPLOAD_EXTENSIONS = ['.mid']
+	DROPBOX_TOKEN = os.environ.get('DROPBOX_TOKEN')
