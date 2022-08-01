@@ -149,7 +149,7 @@ def delete_session(session):
 
 	s = Session.query.filter_by(name=session).first()
 	if s is None:
-		flash('Unable to delete: Session not found.')
+		flash('Unable to delete: Session not found.', 'error')
 		return redirect(url_for('main.manage'))
 	db.session.delete(s)
 	
@@ -159,7 +159,7 @@ def delete_session(session):
 	db.session.commit()
 
 	shutil.rmtree(os.path.join(current_app.config['MIDI_FILES_PATH'], str(s.id)))
-	flash(f'Session "{s.name}" successfully deleted.')
+	flash(f'Session "{s.name}" successfully deleted.', 'success')
 
 	return redirect(url_for('main.manage'))
 
@@ -172,20 +172,20 @@ def delete_midi(session, name):
 
 	s = Session.query.filter_by(name=session).first()
 	if s is None:
-		flash('Unable to delete: Session not found.')
+		flash('Unable to delete: Session not found.', 'error')
 		return redirect(url_for('main.manage'))
 	m = Midi.query.filter_by(name=name).first()
 	if m is None:
-		flash('Unable to delete: File not found.')
+		flash('Unable to delete: File not found.', 'error')
 		return redirect(url_for('main.manage'))
 	db.session.delete(m)
 	db.session.commit()
 	try:
 		os.remove(os.path.join(current_app.config['MIDI_FILES_PATH'], str(s.id), str(m.id)))
 	except FileNotFoundError:
-		flash('Unable to delete: The file was already deleted.')
+		flash('Unable to delete: The file was already deleted.', 'error')
 	else:
-		flash(f'File "{m.name}" from session "{s.name}" successfully deleted.')
+		flash(f'File "{m.name}" from session "{s.name}" successfully deleted.', 'success')
 	return redirect(url_for('main.manage'))
 
 @bp.route('/edit_track_result/<string:midiId>', methods=['POST'])
@@ -239,7 +239,8 @@ def manage():
 				if uploaded_file.filename != '':
 					file_ext = os.path.splitext(uploaded_file.filename)[1]
 					if file_ext not in current_app.config['UPLOAD_EXTENSIONS']:
-						abort(400)
+						flash('File type not accepted: Please convert to a .mid file', 'error')
+						return redirect(url_for('main.manage'))
 					midi_details = get_midi_data(uploaded_file.read())
 					if midi_details['nErrors'] == 0:
 						status = 1
@@ -253,7 +254,7 @@ def manage():
 					uploaded_file.seek(0) # important! otherwise file is blank (unsure why, pointer issue I guess)
 
 					uploaded_file.save(os.path.join(current_app.config['MIDI_FILES_PATH'], str(session_id), f'{str(m.id)}.mid'))
-					flash('File Successfully Uploaded')
+					flash('File Successfully Uploaded', 'success')
 			return redirect(url_for('main.manage'))
 
 	# Add session:
@@ -261,7 +262,7 @@ def manage():
 	if add_session_form.validate_on_submit():
 		s = Session.query.filter_by(name=add_session_form.name.data).first()
 		if s is not None:
-			flash(f'Session "{add_session_form.name.data}" already exists. Please use a different name.')
+			flash(f'Session "{add_session_form.name.data}" already exists. Please use a different name.', 'error')
 			return redirect(url_for('main.manage'))
 		s = Session(name=add_session_form.name.data, date=add_session_form.date.data)
 		print(Session.__table__.name, file=sys.stderr)
