@@ -56,7 +56,7 @@ def get_midi_data(data):
 	elif timing == 1:
 		fps = (tickdiv & 0xFF00) >> 8
 		subFrameRes = tickdiv & 0xFF
-		timingString = 'timecode, fps = {fps}, sub-frame resolution = {subFrameRes}'
+		timingString = f'timecode, fps = {fps}, sub-frame resolution = {subFrameRes}'
 	else:
 		timingString = ''
 		midiData['nErrors'] += 1
@@ -89,7 +89,10 @@ def get_track_instrument(track):
 		ind = track.find(int(0xc0+j).to_bytes(1, 'big'))
 		if ind > -1:
 			instrInd = track[ind+1]
-			instrument = f'{instrInd} ({INSTRUMENT_NAMES[instrInd+1]})'
+			try:
+				instrument = f'{instrInd} ({INSTRUMENT_NAMES[instrInd+1]})'
+			except:
+				instrument = 'Unknown'
 			channel = track[ind] & 0x0f
 			break
 
